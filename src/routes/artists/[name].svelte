@@ -39,7 +39,7 @@
 
 <script lang="ts">
   import AlbumCard from "../../components/AlbumCard.svelte";
-  import preprocessAlbums from "$lib/preprocess-albums";
+  import preprocessAlbums from "$lib/utils/preprocess-albums";
 
   export let artistName: string;
 

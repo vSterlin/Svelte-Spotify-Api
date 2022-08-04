@@ -1,4 +1,4 @@
-import type { Album } from "../types/album";
+import type { Album } from "../../types/album";
 
 const preprocessAlbums = (
   albums: SpotifyApi.AlbumObjectSimplified[] = []
