@@ -26,11 +26,13 @@
     }
 
     const albums = (await spotifyApi.getArtistAlbums(artist.id)).body.items;
-    const preproccessedAlbums = preprocessAlbums(albums);
+
+    const preprocessedArtist = preprocessArtist(artist);
+    const preproccessedAlbums = preprocessAlbums(albums).splice(0, 5);
 
     return {
       props: {
-        artistName: name,
+        artist: preprocessedArtist,
         albums: preproccessedAlbums,
       },
     };
@@ -38,17 +40,18 @@
 </script>
 
 <script lang="ts">
-  import AlbumCard from "../../components/AlbumCard.svelte";
-  import preprocessAlbums from "$lib/utils/preprocess-albums";
+  import type { Artist } from "src/types/artist";
 
-  export let artistName: string;
+  import preprocessAlbums from "$lib/utils/preprocess-albums";
+  import preprocessArtist from "$lib/utils/preprocess-artist";
+  import ArtistBanner from "../../components/ArtistBanner.svelte";
+  import AlbumSection from "../../components/Album/AlbumSection.svelte";
+
+  export let artist: Artist;
 
   export let albums: Album[];
-
-  console.log(albums);
 </script>
 
-<h1>Albums by {artistName}</h1>
-{#each albums as album}
-  <AlbumCard {album} />
-{/each}
+<ArtistBanner {artist} />
+
+<AlbumSection {albums} />

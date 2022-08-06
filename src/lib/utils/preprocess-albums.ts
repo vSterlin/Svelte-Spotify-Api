@@ -3,6 +3,8 @@ import type { Album } from "../../types/album";
 const preprocessAlbums = (
   albums: SpotifyApi.AlbumObjectSimplified[] = []
 ): Album[] => {
+
+  console.log(albums)
   const preprocessedlbums = albums
     .filter(({ album_type }) => album_type === "album")
     .map((album) => {
@@ -17,7 +19,7 @@ const preprocessAlbums = (
         title,
         totalTracks,
         releaseDate,
-        image: images[1]?.url,
+        imageUrl: images[1]?.url,
       };
     })
     .sort(
