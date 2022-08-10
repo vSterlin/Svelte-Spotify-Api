@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
   import type { Load } from "@sveltejs/kit";
   import SpotifyWebApi from "spotify-web-api-node";
-  import type { Album } from "../../types/album";
 
   export const load: Load = async ({ fetch, params }) => {
     const { name } = params;
@@ -21,12 +20,16 @@
         props: {
           artistName: name,
           albums: [],
+          songs: [],
         },
       };
     }
 
     const albums = (await spotifyApi.getArtistAlbums(artist.id)).body.items;
+    const topSongs = (await spotifyApi.getArtistTopTracks(artist.id, "US")).body
+      .tracks;
 
+    const preproccessedSongs = preprocessSongs(topSongs);
     const preprocessedArtist = preprocessArtist(artist);
     const preproccessedAlbums = preprocessAlbums(albums).splice(0, 5);
 
@@ -34,6 +37,7 @@
       props: {
         artist: preprocessedArtist,
         albums: preproccessedAlbums,
+        songs: preproccessedSongs,
       },
     };
   };
@@ -41,17 +45,22 @@
 
 <script lang="ts">
   import type { Artist } from "src/types/artist";
+  import type { Song } from "src/types/song";
+  import type { Album } from "../../types/album";
 
   import preprocessAlbums from "$lib/utils/preprocess-albums";
   import preprocessArtist from "$lib/utils/preprocess-artist";
-  import ArtistBanner from "../../components/ArtistBanner.svelte";
-  import AlbumSection from "../../components/Album/AlbumSection.svelte";
+  import preprocessSongs from "$lib/utils/preprocess-songs";
+
+  import ArtistBanner from "../../lib/components/ArtistBanner.svelte";
+  import AlbumSection from "../../lib/components/Albums/AlbumSection.svelte";
+  import SongSection from "../../lib/components/Songs/SongSection.svelte";
 
   export let artist: Artist;
-
   export let albums: Album[];
+  export let songs: Song[];
 </script>
 
 <ArtistBanner {artist} />
-
 <AlbumSection {albums} />
+<SongSection {songs} />

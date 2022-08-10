@@ -6,8 +6,8 @@
 </script>
 
 <div class="flex justify-between overflow-x-scroll">
-
   {#each albums as album}
   <AlbumCard {album} />
   {/each}
 </div>
+

@@ -6,7 +6,6 @@ const preprocessArtist = (
 
   const { name, images} = artist
 
-  console.log(images)
   return {
     name,
    imageUrl: images[0].url
